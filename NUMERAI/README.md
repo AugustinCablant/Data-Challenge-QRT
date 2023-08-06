@@ -19,19 +19,19 @@ napi = numerapi.NumerAPI("api-public-id", "api-secret-key")
 
 current_round = napi.get_current_round()
 
-\comment : Download latest live features
+#Download latest live features
 napi.download_dataset(f"v4.1/live_{current_round}.parquet")
 live_data = pd.read_parquet(f"v4.1/live_{current_round}.parquet")
 live_features = live_data[[f for f in live_data.columns if "feature" in f]]
 
-\comment : Generate live predictions
+#Generate live predictions
 live_predictions = model.predict(live_features)
 
-\comment :  submission
+#submission
 submission = pd.Series(live_predictions, index=live_features.index).to_frame("prediction")
 submission.to_csv(f"prediction_{current_round}.csv")
 
-\comment : Upload submission 
+#Upload submission 
 napi.upload_predictions(f"prediction_{current_round}.csv", model_id="your-model-id")
 ```
 
